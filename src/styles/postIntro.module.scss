@@ -1,0 +1,17 @@
+.wrapper {
+  h3 {
+    @apply mb-3 text-3xl leading-snug text-left;
+    a {
+      @apply no-underline hover:underline;
+    }
+  }
+}
+.image {
+  @apply mb-5;
+}
+.date {
+  @apply mb-4 text-lg;
+}
+.excerpt {
+  @apply mb-4 text-lg leading-relaxed;
+}

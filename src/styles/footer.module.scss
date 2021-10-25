@@ -1,0 +1,30 @@
+.wrapper {
+  @apply border-t bg-accent-1 border-accent-2;
+}
+.inner {
+  @apply flex flex-col items-start py-28 lg:flex-row;
+  h3 {
+    @apply mb-10 text-4xl font-bold leading-tight tracking-tighter text-center lg:text-5xl lg:text-left lg:mb-0 lg:pr-4 lg:w-1/2;
+  }
+}
+.links {
+  @apply flex flex-col justify-center lg:flex-row lg:pl-4 lg:w-1/2 text-2xl;
+  a {
+    @apply no-underline px-12 py-3 mx-3 mb-6 font-semibold transition-colors text-black duration-200 hover:text-gray-800 lg:px-8 lg:mb-0 hover:underline;
+    &:hover {
+      text-decoration-style: dotted;
+    }
+  }
+  ul {
+    @apply list-none;
+  }
+}
+// .darkLink {
+//   @apply no-underline px-12 py-3 mx-3 mb-6 font-bold text-white transition-colors duration-200 bg-black border border-black hover:bg-white hover:text-black lg:px-8 lg:mb-0;
+// }
+// .lightLink {
+//   @apply no-underline mx-3 font-bold hover:underline;
+// }
+.copyright {
+  @apply text-center text-sm py-4;
+}

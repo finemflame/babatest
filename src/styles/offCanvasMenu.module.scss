@@ -1,0 +1,15 @@
+.wrapper {
+  @apply flex items-center w-full top-0 left-0 right-0 fixed p-8 z-10 h-full bg-white opacity-90 transition-opacity duration-700 ease-in-out;
+  nav {
+    @apply justify-items-end h-16 px-4 items-center lg:flex;
+    ul {
+      @apply flex flex-col items-start justify-between py-4 mx-auto;
+      li {
+        @apply block px-2;
+        a {
+          @apply font-extrabold no-underline hover:underline text-3xl;
+        }
+      }
+    }
+  }
+}

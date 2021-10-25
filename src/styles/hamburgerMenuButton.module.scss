@@ -1,0 +1,21 @@
+.button {
+  @apply flex flex-col items-center justify-center w-12 h-12 border-2 border-black rounded group;
+}
+.topBar {
+  @apply block absolute h-0.5 w-5 bg-current transform transition duration-500 ease-in-out -translate-y-1.5;
+}
+.topBarOpen {
+  @apply block absolute h-0.5 w-5 bg-current transform transition duration-500 ease-in-out rotate-45;
+}
+.middleBar {
+  @apply block absolute h-0.5 w-5 bg-current transform transition duration-500 ease-in-out;
+}
+.middleBarOpen {
+  @apply block absolute h-0.5 w-5 bg-current transform transition duration-500 ease-in-out opacity-0;
+}
+.bottomBar {
+  @apply block absolute h-0.5 w-5 bg-current transform marker:transition duration-500 ease-in-out translate-y-1.5;
+}
+.bottomBarOpen {
+  @apply block absolute h-0.5 w-5 bg-current transform transition duration-500 ease-in-out -rotate-45;
+}

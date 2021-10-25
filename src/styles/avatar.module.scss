@@ -1,0 +1,12 @@
+.wrapper {
+  @apply flex items-center;
+}
+.image {
+  @apply w-12 h-12 relative mr-4;
+  img {
+    @apply rounded-full;
+  }
+}
+.name {
+  @apply text-xl font-bold;
+}

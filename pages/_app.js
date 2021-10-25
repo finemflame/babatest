@@ -1,7 +1,12 @@
-import 'tailwindcss/tailwind.css'
+import OffCanvasProvider from '../src/store/offCanvasProvider'
+import '../src/styles/global.scss'
 
-function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
+function WPApp({ Component, pageProps }) {
+  return (
+    <OffCanvasProvider>
+      <Component {...pageProps} />
+    </OffCanvasProvider>
+  )
 }
 
-export default MyApp
+export default WPApp

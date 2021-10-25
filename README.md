@@ -1,29 +1,36 @@
-# Next.js + Tailwind CSS Example
+# Next.js + Headless WordPress + TailwindCSS Starter
 
-This example shows how to use [Tailwind CSS](https://tailwindcss.com/) [(v2.2)](https://blog.tailwindcss.com/tailwindcss-2-2) with Next.js. It follows the steps outlined in the official [Tailwind docs](https://tailwindcss.com/docs/guides/nextjs).
+Basic styling with TailwindCSS.
+Design based on NextJS official CMS examples.
+Source from a WP GraphQL endpoint.
 
-It uses the new [`Just-in-Time Mode`](https://tailwindcss.com/docs/just-in-time-mode) for Tailwind CSS.
+## Features
 
-## Preview
+- Categories (TODO - sub categories)
+- Posts
+- Tags
+- Pages
+- Replaces internal links with 'next/link'
+- Replaces 'inline images' with 'next/image'
+- Off Canvas menu
+- Gutenberg blocks CSS (not tested)
 
-Preview the example live on [StackBlitz](http://stackblitz.com/):
+## WordPress Plugins
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/vercel/next.js/tree/canary/examples/with-tailwindcss)
+- [WPGraphQL](https://wordpress.org/plugins/wp-graphql/)
+- [Add WPGraphQL SEO](https://wordpress.org/plugins/add-wpgraphql-seo/)
+- [Headless CMS](https://wordpress.org/plugins/headless-cms/)
+- [Yoast SEO](https://wordpress.org/plugins/wordpress-seo/)
 
-## Deploy your own
+## Setup
 
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=next-example):
+1. Clone repository
+2. Copy `.env-example` and rename, configure
+3. Additional options in `/src/config/index.js`
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/vercel/next.js/tree/canary/examples/with-tailwindcss&project-name=with-tailwindcss&repository-name=with-tailwindcss)
+## TODO
 
-## How to use
-
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init) or [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/) to bootstrap the example:
-
-```bash
-npx create-next-app --example with-tailwindcss with-tailwindcss-app
-# or
-yarn create next-app --example with-tailwindcss with-tailwindcss-app
-```
-
-Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
+- There's an issue with sub-categories that still needs sorting out
+- Custom Gutenberg blocks
+- Elementor.. ?
+- Match WP theme.. ?

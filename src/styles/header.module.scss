@@ -1,0 +1,39 @@
+.wrapper {
+  @apply flex-row flex items-start md:justify-between mt-16 mb-16 md:mb-12;
+  div {
+    @apply w-1/2;
+  }
+}
+.left {
+  @apply flex flex-col items-start justify-start;
+  h1 {
+    @apply leading-tighter;
+  }
+  p {
+    @apply text-left text-lg mt-5 pl-2;
+  }
+  a {
+    @apply no-underline hover:underline hover:text-success duration-200 transition-colors;
+  }
+}
+.right {
+  @apply flex flex-row items-center justify-end;
+  nav {
+    @apply justify-items-end h-16 px-4 items-center hidden lg:flex;
+    ul {
+      @apply flex items-center justify-between py-4 mx-auto;
+      li {
+        @apply block px-2;
+        a {
+          @apply font-bold no-underline hover:underline;
+        }
+      }
+    }
+  }
+  span {
+    @apply sr-only;
+  }
+}
+.isHidden {
+  @apply hidden;
+}

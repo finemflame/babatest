@@ -1,0 +1,6 @@
+.wrapper {
+  @apply sm:mx-0;
+  img {
+    @apply shadow-small hover:shadow-medium transition-shadow duration-200;
+  }
+}
