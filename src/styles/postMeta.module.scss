@@ -4,7 +4,7 @@
 .tags {
   @apply py-1;
   a {
-    @apply bg-black text-white no-underline font-semibold hover:no-underline hover:text-white hover:bg-gray-600 rounded-full pt-1 pb-2 px-3 text-sm;
+    @apply bg-black text-white no-underline font-semibold hover:no-underline hover:text-white hover:bg-gray-600 rounded-full pt-1 pb-2 px-3 text-sm lowercase;
   }
 }
 .categories {

@@ -5,7 +5,7 @@ const PostHeader = ({ title }) => {
   return (
     <section className={styles.wrapper}>
       <Container>
-        <h2 dangerouslySetInnerHTML={{ __html: title }} />
+        <h1 dangerouslySetInnerHTML={{ __html: title }} />
       </Container>
     </section>
   )

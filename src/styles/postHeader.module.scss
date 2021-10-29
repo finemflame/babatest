@@ -1,6 +1,6 @@
 .wrapper {
   @apply flex-col md:flex-row flex items-center md:justify-between mt-16 mb-16 md:mb-12;
-  h2 {
+  h1 {
     @apply md:text-7xl leading-none;
   }
 }

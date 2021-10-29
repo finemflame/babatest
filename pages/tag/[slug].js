@@ -1,4 +1,5 @@
 import fetcher from '../../src/lib/fetcher'
+import { isEmpty } from 'lodash'
 import {
   ALL_TAGS,
   ALL_MENUS,
@@ -30,13 +31,19 @@ export async function getStaticProps({ params }) {
   }
   const tag = await fetcher(TAG_BY_SLUG, { variables })
 
+  if (tag.data.tag === null) {
+    return {
+      notFound: true
+    }
+  }
+
   variables = {
     tagId: tag?.data?.tag?.id
   }
 
   const posts = await fetcher(POSTS_BY_TAG_ID, { variables })
 
-  if (!tag) {
+  if (isEmpty(posts.data)) {
     return {
       notFound: true
     }
