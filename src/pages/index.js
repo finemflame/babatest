@@ -1,12 +1,7 @@
-import fetcher from '../src/lib/fetcher'
-import {
-  LATEST_POSTS,
-  PAGE_BY_URI,
-  ALL_MENUS,
-  ALL_SITE_META
-} from '../src/lib/api'
-import Layout from '../src/components/layout'
-import Posts from '../src/components/posts'
+import fetcher from '../lib/fetcher'
+import { LATEST_POSTS, PAGE_BY_URI, ALL_MENUS, ALL_SITE_META } from '../lib/api'
+import Layout from '../components/layout'
+import Posts from '../components/posts'
 
 const Home = ({ data }) => {
   return (

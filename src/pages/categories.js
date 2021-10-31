@@ -1,7 +1,7 @@
-import fetcher from '../src/lib/fetcher'
-import { ALL_CATEGORIES, ALL_MENUS, ALL_SITE_META } from '../src/lib/api'
-import Layout from '../src/components/layout'
-import AllCategories from '../src/components/allCategories'
+import fetcher from '../lib/fetcher'
+import { ALL_CATEGORIES, ALL_MENUS, ALL_SITE_META } from '../lib/api'
+import Layout from '../components/layout'
+import AllCategories from '../components/allCategories'
 
 const Categories = ({ data }) => {
   return (

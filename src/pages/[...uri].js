@@ -1,4 +1,4 @@
-import fetcher from '../src/lib/fetcher'
+import fetcher from '../lib/fetcher'
 import { isEmpty } from 'lodash'
 import {
   ALL_PAGES_URI,
@@ -8,12 +8,12 @@ import {
   CATEGORY_BY_URI,
   POSTS_BY_CATEGORY_ID,
   ALL_SITE_META
-} from '../src/lib/api'
-import Layout from '../src/components/layout'
-import Page from '../src/components/page'
-import Posts from '../src/components/posts'
-import { includesPageUri } from '../src/utils/helpers'
-import { FALLBACK } from '../src/config'
+} from '../lib/api'
+import Layout from '../components/layout'
+import Page from '../components/page'
+import Posts from '../components/posts'
+import { includesPageUri } from '../utils/helpers'
+import { FALLBACK } from '../config'
 
 // TODO
 // Clicking sub categories goes to [categoryUri]/[...uri].js

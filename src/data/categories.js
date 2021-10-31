@@ -6,13 +6,13 @@ export const AllCategories = `
         categories(first: 10000) {
           edges {
             node {
+              categoryId
               databaseId
-              description
               id
-              title: name
-              slug
-              uri
               parentId
+              slug
+              title: name
+              uri
             }
           }
         }
@@ -23,12 +23,13 @@ export const AllCategories = `
 export const CategoryByUri = `
     query CategoryByUriQuery($uri: ID!) {
         category(id: $uri, idType: URI) {
-            databaseId
-            description
-            id
-            title: name
-            slug
-            uri
+          databaseId
+          description
+          id
+          parentId
+          slug
+          title: name
+          uri
             seo {
               ${TaxonomySeoItems}
             }

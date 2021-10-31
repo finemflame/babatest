@@ -1,4 +1,4 @@
-import fetcher from '../../src/lib/fetcher'
+import fetcher from '../../lib/fetcher'
 import { isEmpty } from 'lodash'
 import {
   ALL_TAGS,
@@ -6,10 +6,10 @@ import {
   POSTS_BY_TAG_ID,
   TAG_BY_SLUG,
   ALL_SITE_META
-} from '../../src/lib/api'
-import Layout from '../../src/components/layout'
-import Posts from '../../src/components/posts'
-import { FALLBACK } from '../../src/config'
+} from '../../lib/api'
+import Layout from '../../components/layout'
+import Posts from '../../components/posts'
+import { FALLBACK } from '../../config'
 
 const SingleTag = ({ data }) => {
   return (

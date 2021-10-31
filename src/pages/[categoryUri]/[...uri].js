@@ -1,14 +1,14 @@
-import fetcher from '../../src/lib/fetcher'
+import fetcher from '../../lib/fetcher'
 import {
   ALL_POSTS,
   POST_BY_SLUG,
   ALL_MENUS,
   ALL_SITE_META
-} from '../../src/lib/api'
-import Layout from '../../src/components/layout'
-import Post from '../../src/components/post'
+} from '../../lib/api'
+import Layout from '../../components/layout'
+import Post from '../../components/post'
 // import { includesPageUri } from '../../../utils/helpers'
-import { FALLBACK } from '../../src/config'
+import { FALLBACK } from '../../config'
 
 // TODO
 // Fix: Clicking on a sub category also leads here...

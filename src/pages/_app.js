@@ -1,5 +1,5 @@
-import OffCanvasProvider from '../src/store/offCanvasProvider'
-import '../src/styles/global.scss'
+import OffCanvasProvider from '../store/offCanvasProvider'
+import '../styles/global.scss'
 
 function WPApp({ Component, pageProps }) {
   return (
