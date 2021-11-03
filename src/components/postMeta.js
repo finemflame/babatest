@@ -25,8 +25,8 @@ const PostMeta = ({ tags, categories, date, author }) => {
             <p>
               Posted in:{' '}
               <Link href={categories.nodes[0].uri}>
-                <a title={categories.nodes[0].name}>
-                  {categories.nodes[0].name}
+                <a title={categories.nodes[0].title}>
+                  {categories.nodes[0].title}
                 </a>
               </Link>
             </p>

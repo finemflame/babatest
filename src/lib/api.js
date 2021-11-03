@@ -3,10 +3,11 @@ import {
   AllPosts,
   LatestPosts,
   PostsByCategoryId,
+  PostByUri,
   PostBySlug,
   PostsByTagId
 } from '../data/posts'
-import { AllPagesUri, PageByUri } from './../data/pages'
+import { AllPagesUri, PageByUri } from '../data/pages'
 import { AllCategories, CategoryByUri } from '../data/categories'
 import { AllTags, TagBySlug } from '../data/tags'
 import { AllSiteMeta } from '../data/meta'
@@ -20,7 +21,10 @@ export const LATEST_POSTS = LatestPosts
 //all posts
 export const ALL_POSTS = AllPosts
 
-//all posts
+// get post by uri
+export const POST_BY_URI = PostByUri
+
+// get post by slug
 export const POST_BY_SLUG = PostBySlug
 
 //All pages

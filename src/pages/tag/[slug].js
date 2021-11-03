@@ -1,5 +1,5 @@
-import fetcher from '../../lib/fetcher'
 import { isEmpty } from 'lodash'
+import fetcher from '../../lib/fetcher'
 import {
   ALL_TAGS,
   ALL_MENUS,

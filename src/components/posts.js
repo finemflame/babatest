@@ -4,8 +4,8 @@ import AllPosts from './allPosts'
 import PageHeader from './pageHeader'
 
 const Posts = ({ data, title, isHome }) => {
-  const posts = data?.posts?.nodes
-  const heroPost = posts[0]
+  const posts = data?.edges
+  const heroPost = posts[0]?.node || ''
   const morePosts = posts.slice(1)
   return (
     <Container>
@@ -22,6 +22,7 @@ const Posts = ({ data, title, isHome }) => {
         />
       )}
       {morePosts.length > 0 && <AllPosts posts={morePosts} />}
+      {!heroPost && morePosts.length < 1 && <p>No posts found.</p>}
     </Container>
   )
 }

@@ -13,7 +13,7 @@ export const TagFragment = `
 // get all
 export const AllTags = `
 query AllTagsQuery {
-    tags {
+    tags (first: 20) {
       edges {
         node {
           ...TagFragment         

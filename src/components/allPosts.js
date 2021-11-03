@@ -9,14 +9,14 @@ const AllPosts = ({ posts }) => {
         {posts.map(post => {
           return (
             <PostIntro
-              key={post.slug}
-              title={post.title}
-              coverImage={post.featuredImage?.node}
-              date={post.date}
-              author={post.author?.node}
-              slug={post.slug}
-              uri={post.uri}
-              excerpt={post.excerpt}
+              key={post.node.slug}
+              title={post.node.title}
+              coverImage={post.node.featuredImage?.node}
+              date={post.node.date}
+              author={post.node.author?.node}
+              slug={post.node.slug}
+              uri={post.node.uri}
+              excerpt={post.node.excerpt}
             />
           )
         })}

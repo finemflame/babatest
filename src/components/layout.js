@@ -1,4 +1,5 @@
 import Head from 'next/head'
+// import { useRouter } from 'next/router'
 import Seo from './seo'
 import { sanitize } from '../utils/helpers'
 import Header from './header'
@@ -6,21 +7,13 @@ import Footer from './footer'
 import styles from '../styles/layout.module.scss'
 
 const Layout = ({ children, data }) => {
-  // if (!data?.page) {
-  //   return null
-  // }
-
+  // console.log('layout: ', data)
   const document = data || {}
-
-  const pageData =
-    document?.pageData?.page ||
-    document?.pageData?.post ||
-    document?.pageData?.category ||
-    document?.pageData?.tag
-
+  // const router = useRouter()
+  // console.log('Router: ', router)
   return (
     <>
-      <Seo seo={pageData?.seo} uri={pageData?.uri} />
+      <Seo seo={document?.pageData?.seo} uri={document?.pageData?.uri} />
       <Head>
         {document?.siteMeta?.headerMeta?.favicon && (
           <link
@@ -29,14 +22,16 @@ const Layout = ({ children, data }) => {
           />
         )}
 
-        {document?.seo?.schemaDetails || document?.seo?.schema?.raw ? (
+        {document?.pageData?.seo?.schemaDetails ||
+        document?.pageData?.seo?.schema?.raw ? (
           <script
             type='application/ld+json'
             className='yoast-schema-graph'
             key='yoastSchema'
             dangerouslySetInnerHTML={{
               __html: sanitize(
-                document?.seo.schemaDetails || document?.seo?.schema?.raw
+                document?.pageData?.seo.schemaDetails ||
+                  document?.pageData?.seo?.schema?.raw
               )
             }}
           />
@@ -48,11 +43,11 @@ const Layout = ({ children, data }) => {
           nav={document?.menus?.primaryMenu?.edges}
         />
         <main>{children}</main>
+        <Footer
+          data={document?.siteMeta?.footerMeta}
+          footerNav={document?.menus?.secondaryMenu?.edges}
+        />
       </div>
-      <Footer
-        data={document?.siteMeta?.footerMeta}
-        footerNav={document?.menus?.secondaryMenu?.edges}
-      />
     </>
   )
 }

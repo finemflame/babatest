@@ -3,13 +3,13 @@ import PropTypes from 'prop-types'
 import { siteMeta } from '../config'
 
 const Seo = ({ seo, uri }) => {
-  const metaRobotsNofollow = seo.metaRobotsNofollow === 'follow' ? true : false
-  const metaRobotsNoindex = seo.metaRobotsNoindex === 'index' ? true : false
+  // const metaRobotsNofollow = seo.metaRobotsNofollow === 'follow' ? true : false
+  // const metaRobotsNoindex = seo.metaRobotsNoindex === 'index' ? true : false
   const {
     title,
     metaDesc,
-    // metaRobotsNoindex,
-    // metaRobotsNofollow,
+    metaRobotsNoindex,
+    metaRobotsNofollow,
     opengraphDescription,
     opengraphTitle,
     opengraphImage,
@@ -36,8 +36,8 @@ const Seo = ({ seo, uri }) => {
         images: [
           {
             url: opengraphImage?.sourceUrl,
-            width: 1280,
-            height: 720
+            width: 1200,
+            height: 630
           }
         ],
         /* eslint-disable */

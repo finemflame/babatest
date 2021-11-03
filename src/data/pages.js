@@ -3,11 +3,12 @@ import { SeoFragment } from './seo'
 // All Pages
 export const AllPagesUri = `
     query AllPagesQuery {
-        pages(where: {status: PUBLISH}, first: 20) {
+        pages(where: {status: PUBLISH}, first: 5) {
             edges {
                 node {
                     id
                     uri
+                    slug
                 }
             }
         }
@@ -16,21 +17,15 @@ export const AllPagesUri = `
 
 // query PageBySlugQuery($id: ID!, $idType: PageIdType!) {
 export const PageByUri = `    
-    query PageByUriQuery($uri: String) {
-        page: pageBy(uri: $uri) {
+    query PageByUri ($uri: ID!) {
+        page(id: $uri, idType: URI) {
+            id
             title
             slug
             date
             modified
             content
             uri
-            featuredImage {
-                node {
-                    altText
-                    sourceUrl
-                    caption
-                }
-            }
             seo {
                 ...SeoFragment
             }

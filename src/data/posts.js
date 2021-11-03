@@ -1,38 +1,67 @@
 import { SeoFragment } from './seo'
 import { TagFragment } from './tags'
 
-// latest posts
-export const LatestPosts = `
-    query LatestPosts {
-        posts(first: 11, where: {orderby: {field: DATE, order: DESC}, status: PUBLISH}) {
-            nodes {
-                title
-                excerpt
-                slug
-                date
-                uri
-                featuredImage {
-                    node {
-                        sourceUrl
-                        altText
-                        mediaDetails {
-                            width
-                            height
-                        }
-                    }
-                }
-                author {
-                    node {
-                        name
-                        firstName
-                        lastName
-                        avatar {
-                            url
-                        }
-                    }
-                }
-            }
+// summary post items
+export const SummaryPostItems = `
+    date
+    excerpt
+    id
+    slug
+    title
+    uri
+`
+
+// full post fragment
+export const PostFragment = `
+    fragment PostFragment on Post {
+        ${SummaryPostItems}
+        databaseId
+        modified
+        content
+    }
+`
+
+// featured image fragment
+export const FeaturedImageFragment = `
+    fragment FeaturedImageFragment on MediaItem {
+        altText
+        mediaDetails {
+            width
+            height
         }
+        caption
+        id
+        sizes
+        sourceUrl
+        srcSet
+    }
+`
+
+// author fragment
+export const AuthorFragment = `
+    fragment AuthorFragment on User {
+        id
+        name
+        firstName
+        lastName
+        slug
+        avatar {
+            height
+            width
+            url
+        }
+    }
+`
+
+// categories fragment
+export const CategoryFragment = `
+    fragment CategoryFragment on Category {
+        categoryId
+        databaseId
+        id
+        title: name
+        slug
+        uri
     }
 `
 
@@ -40,73 +69,61 @@ export const LatestPosts = `
 export const AllPosts = `
     query AllPostsQuery {
         posts(first: 11, where: {orderby: {field: DATE, order: DESC}, status: PUBLISH}) {
-            nodes {
-                title
-                excerpt
-                slug
-                date
-                uri
-                featuredImage {
-                    node {
-                        sourceUrl
-                        altText
-                        mediaDetails {
-                            width
-                            height
-                        }
-                    }
-                }
-                author {
-                    node {
-                        name
-                        firstName
-                        lastName
-                        avatar {
-                            url
-                        }
-                    }
+            edges {
+                node {
+                    id
+                    slug
+                    uri
                 }
             }
         }
     }
 `
 
-//get post data
-export const PostBySlug = `
-    query PostBySlug ($uri: String) {
-        post: postBy(uri: $uri) {
-            author {
+// latest posts
+export const LatestPosts = `
+    query LatestPosts {
+        posts(first: 11, where: {orderby: {field: DATE, order: DESC}, status: PUBLISH}) {
+            edges {
                 node {
-                    avatar {
-                        height
-                        url
-                        width
+                    ${SummaryPostItems}
+                    isSticky
+                    featuredImage {
+                        node {
+                            ...FeaturedImageFragment
+                        }
                     }
-                    id
-                    name
-                    slug
+                    author {
+                        node {
+                            ...AuthorFragment
+                        }
+                    }
                 }
             }
-            title
-            slug
-            date
-            categories {
-                nodes {
-                    categoryId
-                    name
-                    uri
-                }
-            }
-            content
-            uri
+        }
+    }
+    ${FeaturedImageFragment}
+    ${AuthorFragment}
+`
+
+//get post data
+export const PostByUri = `
+    query PostByUri ($uri: ID!) {
+        post(id: $uri, idType: URI) {
+            ...PostFragment
             featuredImage {
                 node {
-                    altText
-                    sourceUrl
-                    mediaDetails {
-                        width
-                        height
-                    }
+                    ...FeaturedImageFragment
+                }
+            }
+            author {
+                node {
+                    ...AuthorFragment
+                }
+            }
+            categories {
+                nodes {
+                    ...CategoryFragment
                 }
             }
             seo {
@@ -119,148 +136,121 @@ export const PostBySlug = `
             }
         }
     }
+    ${PostFragment}
+    ${FeaturedImageFragment}
+    ${AuthorFragment}
+    ${CategoryFragment}
     ${SeoFragment}
     ${TagFragment}
 `
 
-// export const PostBySlug = `
-//     query PostBySlug ($id: ID!, $idType: PostIdType!) {
-//         post(id: $id, idType: $idType, orderby: {field: DATE, order: DESC}, status: PUBLISH}) {
-//             title
-//             slug
-//             date
-//             content
-//             uri
-//             featuredImage {
-//                 node {
-//                     altText
-//                     sourceUrl
-//                     mediaDetails {
-//                         width
-//                         height
-//                     }
-//                 }
-//             }
-//             seo{
-//                 ...SeoFragment
-//             }
-//         }
-//     }
-//      ${SeoFragment}
-// `
+//get post data
+export const PostBySlug = `
+    query PostBySlug ($slug: ID!) {
+        post(id: $slug, idType: SLUG) {
+            ...PostFragment
+            featuredImage {
+                node {
+                    ...FeaturedImageFragment
+                }
+            }
+            author {
+                node {
+                    ...AuthorFragment
+                }
+            }
+            categories {
+                nodes {
+                    ...CategoryFragment
+                }
+            }
+            seo {
+                ...SeoFragment
+            }
+            tags {
+                nodes{
+                    ...TagFragment
+                }
+            }
+        }
+    }
+    ${PostFragment}
+    ${FeaturedImageFragment}
+    ${AuthorFragment}
+    ${CategoryFragment}
+    ${SeoFragment}
+    ${TagFragment}
+`
 
 // posts by category ID
 export const PostsByCategoryId = `
     query PostsByCategoryIdQuery($categoryId: Int!) {
         posts(first: 11, where: { categoryId: $categoryId, orderby: {field: DATE, order: DESC}, status: PUBLISH }) {
-            nodes {
-                author {
-                    node {
-                    avatar {
-                        height
-                        url
-                        width
+            edges {
+                node {
+                    ${SummaryPostItems}
+                    isSticky
+                    featuredImage {
+                        node {
+                            ...FeaturedImageFragment
+                        }
                     }
-                    id
-                    name
-                    slug
+                    author {
+                        node {
+                            ...AuthorFragment
+                        }
                     }
-                }
-                id
-                categories {
-                    edges {
-                    node {
-                        databaseId
-                        id
-                        name
-                        slug
-                    }
-                    }
-                }
-                content
-                date
-                excerpt
-                featuredImage {
-                    node {
-                    altText
-                    mediaDetails {
-                        width
-                        height
-                    }
-                    caption
-                    id
-                    sizes
-                    sourceUrl
-                    srcSet
+                    categories {
+                        edges {
+                            node {
+                                categoryId
+                                ...CategoryFragment
+                            }
+                        }
                     }
                 }
-                modified
-                databaseId
-                title
-                slug
-                isSticky
-                uri
-                }
+            }
         }
     }
+    ${FeaturedImageFragment}
+    ${AuthorFragment}
+    ${CategoryFragment}
 `
 
 // posts by tag ID
 export const PostsByTagId = `
     query PostsByTagIdQuery($tagId: String) {
         posts(first: 11, where: { tagId: $tagId, orderby: {field: DATE, order: DESC}, status: PUBLISH }) {
-            nodes {
-                author {
-                    node {
-                    avatar {
-                        height
-                        url
-                        width
+            edges {
+                node {
+                    ${SummaryPostItems}
+                    isSticky
+                    featuredImage {
+                        node {
+                            ...FeaturedImageFragment
+                        }
                     }
-                    id
-                    name
-                    slug
+                    author {
+                        node {
+                            ...AuthorFragment
+                        }
                     }
-                }
-                id
-                categories {
-                    edges {
-                    node {
-                        databaseId
-                        id
-                        name
-                        slug
+                    categories {
+                        edges {
+                            node {
+                                ...CategoryFragment
+                            }
+                        }
                     }
-                    }
-                }
-                content
-                date
-                excerpt
-                featuredImage {
-                    node {
-                    altText
-                    mediaDetails {
-                        width
-                        height
-                    }
-                    caption
-                    id
-                    sizes
-                    sourceUrl
-                    srcSet
+                    seo {
+                        ...SeoFragment
                     }
                 }
-                modified
-                databaseId
-                title
-                slug
-                isSticky
-                uri
-                seo {
-                    ...SeoFragment
-                }
-                }
+            }
         }
     }
+    ${FeaturedImageFragment}
+    ${AuthorFragment}
+    ${CategoryFragment}
     ${SeoFragment}
 `
