@@ -7,13 +7,14 @@ export const TagFragment = `
       databaseId
       title: name
       slug 
+      uri
     }
 `
 
 // get all
 export const AllTags = `
 query AllTagsQuery {
-    tags (first: 20) {
+    tags (first: 100) {
       edges {
         node {
           ...TagFragment         

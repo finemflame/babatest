@@ -25,7 +25,13 @@ export async function getStaticProps() {
       data: {
         categoriesData: categories.data || {},
         menus: menus.data || {},
-        siteMeta: meta.data || {}
+        siteMeta: meta.data || {},
+        pageData: {
+          seo: {
+            title: 'Site Categories'
+          },
+          title: 'Site Categories'
+        }
       }
     },
     revalidate: 1

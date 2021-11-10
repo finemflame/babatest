@@ -4,7 +4,6 @@ import PostBody from './postBody'
 import PostMeta from './postMeta'
 
 const Post = ({ post }) => {
-  // console.log('Post: ', post)
   return (
     <>
       {post?.featuredImage?.node && (

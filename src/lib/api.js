@@ -7,7 +7,7 @@ import {
   PostBySlug,
   PostsByTagId
 } from '../data/posts'
-import { AllPagesUri, PageByUri } from '../data/pages'
+import { AllPages, PageByUri } from '../data/pages'
 import { AllCategories, CategoryByUri } from '../data/categories'
 import { AllTags, TagBySlug } from '../data/tags'
 import { AllSiteMeta } from '../data/meta'
@@ -28,7 +28,7 @@ export const POST_BY_URI = PostByUri
 export const POST_BY_SLUG = PostBySlug
 
 //All pages
-export const ALL_PAGES_URI = AllPagesUri
+export const ALL_PAGES = AllPages
 
 // query PageBySlugQuery($id: ID!, $idType: PageIdType!) {
 export const PAGE_BY_URI = PageByUri

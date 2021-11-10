@@ -1,4 +1,5 @@
 .wrapper {
+  @apply min-h-full;
   ul {
     @apply list-none;
   }

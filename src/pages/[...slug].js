@@ -1,14 +1,25 @@
 import { isEmpty } from 'lodash'
-import { getAllPageData, getAllPagePaths } from '../lib/query'
+import {
+  getAllCommonPostTypeData,
+  getAllCommonPostTypeSlugs
+} from '../lib/query'
 import Layout from '../components/layout'
 import Page from '../components/page'
+import Posts from '../components/posts'
+import Post from '../components/post'
 import { FALLBACK } from '../config'
 
 const SinglePage = ({ data }) => {
-  console.log('...slug: ', data)
   return (
     <Layout data={data}>
-      <Page page={data?.pageData?.page} />
+      {data?.type === 'page' && <Page page={data?.pageData?.pageInfo} />}
+      {data?.type === 'category' && (
+        <Posts
+          data={data?.pageData?.posts}
+          title={data?.pageData?.pageInfo?.title}
+        />
+      )}
+      {data.type === 'post' && <Post post={data?.pageData?.pageInfo} />}
     </Layout>
   )
 }
@@ -16,12 +27,12 @@ const SinglePage = ({ data }) => {
 export default SinglePage
 
 export async function getStaticProps({ params }) {
-  const response = await getAllPageData({ params })
-  console.log('pagedata: ', response)
+  const response = await getAllCommonPostTypeData({ params })
+
   if (
     isEmpty(response) ||
     isEmpty(response.page.uri) ||
-    isEmpty(response.page.page)
+    isEmpty(response.page)
   ) {
     return {
       notFound: true
@@ -31,6 +42,7 @@ export async function getStaticProps({ params }) {
   return {
     props: {
       data: {
+        type: response.type || {},
         menus: response.menus || {},
         siteMeta: response.meta || {},
         pageData: response.page || {}
@@ -41,10 +53,10 @@ export async function getStaticProps({ params }) {
 }
 
 export async function getStaticPaths() {
-  const pagesPathsData = await getAllPagePaths()
+  const commonPostTypePaths = await getAllCommonPostTypeSlugs()
 
   return {
-    paths: pagesPathsData || [],
+    paths: commonPostTypePaths || [],
     fallback: FALLBACK
   }
 }

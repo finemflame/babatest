@@ -3,108 +3,67 @@ import fetcher from './fetcher'
 import { includesPageUri } from '../utils/helpers'
 import {
   ALL_CATEGORIES,
-  ALL_PAGES_URI,
+  ALL_PAGES,
   ALL_POSTS,
   ALL_MENUS,
   ALL_SITE_META,
+  ALL_TAGS,
   CATEGORY_BY_URI,
   LATEST_POSTS,
+  POSTS_BY_TAG_ID,
   PAGE_BY_URI,
   POST_BY_URI,
-  POSTS_BY_CATEGORY_ID
+  POSTS_BY_CATEGORY_ID,
+  TAG_BY_SLUG
 } from './api'
 
-// get all category slugs
-export async function getAllCategorySlugs() {
-  const response = await fetcher(ALL_CATEGORIES)
-
-  return response?.data?.categories?.edges
-}
-
-// get all post slugs
-export async function getAllPostSlugs() {
-  const response = await fetcher(ALL_POSTS)
-
-  return response?.data?.posts?.edges
-}
-
 // get all slugs
-export async function getAllSlugs(allPosts) {
+export async function getSlugs(allPosts) {
   const response = await fetcher(allPosts)
   return response?.data
 }
 
-// get all page paths
-export async function getAllPagePaths() {
-  const allPages = await getAllSlugs(ALL_PAGES_URI)
+// get all category and post slugs and return array of paths
+export async function getAllCommonPostTypeSlugs() {
+  const allPages = await getSlugs(ALL_PAGES)
+  const allCategories = await getSlugs(ALL_CATEGORIES)
+  const allPosts = await getSlugs(ALL_POSTS)
 
-  const pagesPathsData = []
+  const allPaths = []
 
   allPages &&
     allPages?.pages?.edges.map(page => {
       if (page?.node?.uri !== null && !includesPageUri(page?.node?.uri)) {
         const slugs = page?.node?.uri?.split('/').filter(pageSlug => pageSlug)
-        pagesPathsData.push({ params: { slug: slugs } })
+        allPaths.push({
+          params: { slug: slugs }
+        })
       }
     })
 
-  return pagesPathsData
-}
-// get all category and post slugs and return array of paths
-export async function getAllCategoryPostSlugs() {
-  // const allCategories = await getAllSlugs(ALL_CATEGORIES)
-  const allCategories = await getAllCategorySlugs()
-
-  const allPosts = await getAllSlugs(ALL_POSTS)
-
-  const allCatPostsPaths = []
-
-  // allCategories?.categories?.edges.map(category => {
-  allCategories.map(category => {
-    if (!isEmpty(category.node.uri)) {
-      const slugs = category?.node?.uri
-        .split('/')
-        .filter(categorySlug => categorySlug)
-      allCatPostsPaths.push({
-        params: { slugParent: slugs.shift(), slugChild: slugs }
-      })
-    }
-  })
-
-  allPosts?.posts?.edges.map(post => {
-    const slugs = post?.node?.uri.split('/').filter(postSlug => postSlug)
-    allCatPostsPaths.push({
-      params: { slugParent: slugs.shift(), slugChild: slugs }
+  allCategories &&
+    allCategories?.categories?.edges.map(category => {
+      if (!isEmpty(category?.node?.uri)) {
+        const slugs = category?.node?.uri
+          .split('/')
+          .filter(categorySlug => categorySlug)
+        allPaths.push({
+          params: { slug: slugs }
+        })
+      }
     })
-  })
 
-  return allCatPostsPaths
-}
+  allPosts &&
+    allPosts?.posts?.edges.map(post => {
+      if (!isEmpty(post?.node?.uri)) {
+        const slugs = post?.node?.uri.split('/').filter(postSlug => postSlug)
+        allPaths.push({
+          params: { slug: slugs }
+        })
+      }
+    })
 
-// get category data with posts
-export async function getCategoryWithPosts(slugParent, slugChild = '') {
-  let slug = `/${slugParent}/`
-  if (slugChild) {
-    slug = `/${slugParent}/${slugChild.join('/')}/`
-  }
-  let variables = {
-    uri: slug
-  }
-
-  const pageData = await fetcher(CATEGORY_BY_URI, { variables })
-
-  variables = {
-    categoryId: pageData?.data?.category?.categoryId
-  }
-
-  const postsData = await fetcher(POSTS_BY_CATEGORY_ID, { variables })
-
-  const data = {
-    pageData,
-    postsData
-  }
-
-  return data
+  return allPaths
 }
 
 // get index page data
@@ -134,100 +93,168 @@ export async function getIndexPageData() {
 }
 
 // all pages data
-export async function getAllPageData({ params: { slug } }) {
-  const menusData = await fetcher(ALL_MENUS)
-  const metaData = await fetcher(ALL_SITE_META)
-
+export async function getAllPageData(slug, query) {
   let data = {}
 
+  const uri = `/${slug.join('/')}/`
   const variables = {
-    uri: `/${slug.join('/')}/`
+    uri: uri
   }
 
-  const pageData = await fetcher(PAGE_BY_URI, { variables })
+  const pageData = await fetcher(query, { variables })
+
+  return (data = { pageData })
+}
+
+// get category data with posts
+export async function getCategoryWithPosts(slug) {
+  let data = {}
+
+  const { pageData } = await getAllPageData(slug, CATEGORY_BY_URI)
+  const variables = {
+    categoryId: pageData?.data?.category?.categoryId
+  }
+
+  const postsData = await fetcher(POSTS_BY_CATEGORY_ID, { variables })
 
   return (data = {
-    type: 'page',
-    menus: menusData.data || {},
-    meta: metaData.data || {},
-    page: {
-      uri: pageData?.data?.page?.uri || {},
-      seo: pageData?.data?.page?.seo || {},
-      page: pageData?.data?.page || {}
-    }
+    pageData,
+    postsData
   })
 }
 
 // all category/posts data
-export async function getAllCategoryPostData({
-  params: { slugParent, slugChild }
-}) {
+export async function getAllCommonPostTypeData({ params: { slug } }) {
   const menusData = await fetcher(ALL_MENUS)
 
   const metaData = await fetcher(ALL_SITE_META)
 
-  // return if no paths found
-  if (isEmpty(slugParent) && isEmpty(slugChild)) {
-    let data = {}
-    return (data = {})
+  let data = {}
+  let response = {}
+  let postType = 'page'
+  let documentData = {
+    pageData: {},
+    postsData: {}
+  }
+  // return if paths don't exist
+  if (isEmpty(slug)) {
+    return data
   }
 
   // slugParent found, no slugChild return category page data
-  if (!isEmpty(slugParent) && isEmpty(slugChild)) {
-    let data = {}
+  if (Array.isArray(slug) && slug.length === 1) {
+    //get page data
+    response = await getAllPageData(slug, PAGE_BY_URI)
+    documentData = {
+      pageData: response?.pageData?.data?.page
+    }
 
-    const { pageData, postsData } = await getCategoryWithPosts(slugParent)
+    //if no page data is returned, get category data
+    if (isEmpty(documentData?.pageData?.uri)) {
+      response = await getCategoryWithPosts(slug)
+      postType = 'category'
+      documentData = {
+        pageData: response?.pageData?.data?.category,
+        postsData: response?.postsData?.data?.posts
+      }
+    }
 
     return (data = {
-      type: 'category',
+      type: postType,
       menus: menusData.data || {},
       meta: metaData.data || {},
       page: {
-        uri: pageData?.data?.category?.uri || {},
-        seo: pageData?.data?.category?.seo || {},
-        category: pageData?.data?.category || {},
-        post: {},
-        posts: postsData?.data?.posts || {}
+        uri: documentData?.pageData?.uri || {},
+        seo: documentData?.pageData?.seo || {},
+        pageInfo: documentData?.pageData || {},
+        posts: documentData?.postsData || {}
       }
     })
   }
 
-  // slugChild length only 1, must be a Post then
-  if (Array.isArray(slugChild) && slugChild.length >= 1) {
-    let data = {}
-    let viewType = 'post'
-    const slug = `/${slugParent}/${slugChild.join('/')}/`
+  // slug array longer than 1
+  if (Array.isArray(slug) && slug.length > 1) {
+    //get page data
+    response = await getAllPageData(slug, PAGE_BY_URI)
 
-    let variables = {
-      uri: slug
+    documentData = {
+      pageData: response?.pageData?.data?.page,
+      postsData: {}
+    }
+    //if no page data is returned, get category data
+    if (isEmpty(documentData?.pageData?.uri)) {
+      response = await getCategoryWithPosts(slug)
+      postType = 'category'
+      documentData = {
+        pageData: response?.pageData?.data?.category,
+        postsData: response?.postsData?.data?.posts
+      }
     }
 
-    let pageData = await fetcher(POST_BY_URI, { variables })
-
-    let postsData = { data: { posts: {} } }
-    let viewUri = pageData?.data?.post?.uri
-    let viewSeo = pageData?.data?.post?.seo
-
-    if (pageData.data.post.uri === null) {
-      const catPostsData = await getCategoryWithPosts(slugParent, slugChild)
-      pageData = catPostsData.pageData
-      postsData = catPostsData.postsData
-      viewType = 'category'
-      viewUri = pageData.data?.category?.uri
-      viewSeo = pageData.data?.category?.seo
+    //if no category data is returned, get post data
+    if (
+      isEmpty(documentData?.postsData) &&
+      documentData?.pageData?.categoryId === null
+    ) {
+      response = await getAllPageData(slug, POST_BY_URI)
+      postType = 'post'
+      documentData = {
+        pageData: response?.pageData?.data?.post,
+        postsData: {}
+      }
     }
 
     return (data = {
-      type: viewType,
+      type: postType,
       menus: menusData.data || {},
       meta: metaData.data || {},
       page: {
-        uri: viewUri || {},
-        seo: viewSeo || {},
-        category: pageData?.data?.category || {},
-        post: pageData?.data?.post || {},
-        posts: postsData?.data?.posts || {}
+        uri: documentData?.pageData?.uri || {},
+        seo: documentData?.pageData?.seo || {},
+        pageInfo: documentData?.pageData || {},
+        posts: documentData?.postsData || {}
       }
     })
   }
+}
+
+// get all tag paths
+export async function getAllTagSlugs() {
+  const response = await fetcher(ALL_TAGS)
+
+  const allTags = response?.data?.tags?.edges
+
+  const paths = allTags.map(tag => {
+    return { params: { slug: tag?.node?.slug } }
+  })
+
+  return paths
+}
+
+// get all tag posts data
+export async function getAllTagPostsData(slug) {
+  const menusData = await fetcher(ALL_MENUS)
+  const metaData = await fetcher(ALL_SITE_META)
+  let data = {}
+  let variables = {
+    slug: slug
+  }
+  const pageData = await fetcher(TAG_BY_SLUG, { variables })
+
+  variables = {
+    tagId: pageData?.data?.tag?.id
+  }
+
+  const postsData = await fetcher(POSTS_BY_TAG_ID, { variables })
+
+  return (data = {
+    menus: menusData.data || {},
+    meta: metaData.data || {},
+    page: {
+      uri: pageData?.data?.tag?.uri || {},
+      seo: pageData?.data?.tag?.seo || {},
+      pageInfo: pageData?.data?.tag || {},
+      posts: postsData?.data?.posts || {}
+    }
+  })
 }

@@ -1,20 +1,16 @@
 import { isEmpty } from 'lodash'
-import fetcher from '../../lib/fetcher'
-import {
-  ALL_TAGS,
-  ALL_MENUS,
-  POSTS_BY_TAG_ID,
-  TAG_BY_SLUG,
-  ALL_SITE_META
-} from '../../lib/api'
 import Layout from '../../components/layout'
 import Posts from '../../components/posts'
 import { FALLBACK } from '../../config'
+import { getAllTagPostsData, getAllTagSlugs } from '../../lib/query'
 
 const SingleTag = ({ data }) => {
   return (
     <Layout data={data}>
-      <Posts data={data?.postData} title={data?.pageData?.tag?.title} />
+      <Posts
+        data={data?.pageData?.posts}
+        title={data?.pageData?.pageInfo?.title}
+      />
     </Layout>
   )
 }
@@ -22,28 +18,9 @@ const SingleTag = ({ data }) => {
 export default SingleTag
 
 export async function getStaticProps({ params }) {
-  const menus = await fetcher(ALL_MENUS)
-  const meta = await fetcher(ALL_SITE_META)
+  const tagData = await getAllTagPostsData(params.slug)
 
-  let variables = {
-    // uri: params?.uri.join('/')
-    slug: params?.slug
-  }
-  const tag = await fetcher(TAG_BY_SLUG, { variables })
-
-  if (tag.data.tag === null) {
-    return {
-      notFound: true
-    }
-  }
-
-  variables = {
-    tagId: tag?.data?.tag?.id
-  }
-
-  const posts = await fetcher(POSTS_BY_TAG_ID, { variables })
-
-  if (isEmpty(posts.data)) {
+  if (isEmpty(tagData) || isEmpty(tagData.page.uri) || isEmpty(tagData.page)) {
     return {
       notFound: true
     }
@@ -52,10 +29,9 @@ export async function getStaticProps({ params }) {
   return {
     props: {
       data: {
-        menus: menus.data || {},
-        siteMeta: meta.data || {},
-        pageData: tag.data || {},
-        postData: posts.data || {}
+        menus: tagData?.menus || {},
+        siteMeta: tagData?.meta || {},
+        pageData: tagData?.page || {}
       }
     },
     revalidate: 1
@@ -63,16 +39,10 @@ export async function getStaticProps({ params }) {
 }
 
 export async function getStaticPaths() {
-  const response = await fetcher(ALL_TAGS)
-
-  const allTags = response?.data?.tags?.edges
-
-  const paths = allTags.map(tag => {
-    return { params: { slug: tag?.node?.slug } }
-  })
+  const tagPaths = await getAllTagSlugs()
 
   return {
-    paths: paths || [],
+    paths: tagPaths || [],
     fallback: FALLBACK
   }
 }

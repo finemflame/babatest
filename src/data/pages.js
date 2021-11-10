@@ -1,7 +1,7 @@
 import { SeoFragment } from './seo'
 
 // All Pages
-export const AllPagesUri = `
+export const AllPages = `
     query AllPagesQuery {
         pages(where: {status: PUBLISH}, first: 5) {
             edges {

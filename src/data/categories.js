@@ -16,7 +16,7 @@ export const CategoryFragment = `
 // All categories
 export const AllCategories = `
   query AllCategories {
-    categories(first: 20) {
+    categories(first: 10) {
       edges {
         node {
           id

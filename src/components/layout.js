@@ -1,5 +1,4 @@
 import Head from 'next/head'
-// import { useRouter } from 'next/router'
 import Seo from './seo'
 import { sanitize } from '../utils/helpers'
 import Header from './header'
@@ -7,10 +6,7 @@ import Footer from './footer'
 import styles from '../styles/layout.module.scss'
 
 const Layout = ({ children, data }) => {
-  // console.log('layout: ', data)
   const document = data || {}
-  // const router = useRouter()
-  // console.log('Router: ', router)
   return (
     <>
       <Seo seo={document?.pageData?.seo} uri={document?.pageData?.uri} />

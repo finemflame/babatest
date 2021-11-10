@@ -35,7 +35,12 @@ export async function getStaticProps() {
     props: {
       data: {
         menus: menus.data || {},
-        siteMeta: meta.data || {}
+        siteMeta: meta.data || {},
+        pageData: {
+          seo: {
+            title: '404 - Page Not Found'
+          }
+        }
       }
     },
     revalidate: 1
