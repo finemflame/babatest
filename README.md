@@ -2,14 +2,14 @@
 
 Basic styling with TailwindCSS.
 Design based on NextJS official CMS examples.
-Source from a WP GraphQL endpoint.
+Source from a WordPress GraphQL endpoint.
 
 ## Features
 
-- Categories (TODO - sub categories)
+- Categories with sub categories
 - Posts
 - Tags
-- Pages
+- Pages with nested pages
 - Replaces internal links with 'next/link'
 - Replaces 'inline images' with 'next/image'
 - Off Canvas menu
@@ -25,12 +25,13 @@ Source from a WP GraphQL endpoint.
 ## Setup
 
 1. Clone repository
-2. Copy `.env-example` and rename, configure
+2. Copy `.env-example` and rename to `.env`, configure
 3. Additional options in `/src/config/index.js`
+4. Run `npm install`
+5. Run `npm dev`
 
 ## TODO
 
-- There's an issue with sub-categories that still needs sorting out
 - Custom Gutenberg blocks
 - Elementor.. ?
 - Match WP theme.. ?
